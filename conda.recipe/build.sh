@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 env
-echo $PREFIX
 
 export CC="ccache $CC"
 export CXX="ccache $CXX"

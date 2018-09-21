@@ -5,7 +5,7 @@ source:
     fn: libint-2.0.3-stable.tgz 
     url: http://downloads.sourceforge.net/project/libint/libint-for-mpqc/libint-2.0.3-stable.tgz 
 build:
-    number: 0 
+    number: 1
 requirements:
     build:
       - {{ compiler('c') }}
@@ -17,18 +17,9 @@ requirements:
       - boost
     run: []
 test:
-    requires:
-      - {{ compiler('c') }}
-      - {{ compiler('cxx') }}
-    source_files:
-      - src/*
-      - include/*
-      - lib/*
-      - tests/*
-      - Makefile
+    commands:
+      - conda inspect linkages libint
 about:
     home: https://github.com/psi4/libint
     license: GNU General Public License v2 or later (GPLv2+)
     summary: two-body molecular integrals over Gaussian functions library
-extra:
-    final: true
