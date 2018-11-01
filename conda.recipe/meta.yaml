@@ -1,18 +1,22 @@
 package:
     name: libint
-    version: {{ PROJECT_VERSION }}
+    version: 2.3.1
 source:
-    fn: libint-2.0.3-stable.tgz 
-    url: http://downloads.sourceforge.net/project/libint/libint-for-mpqc/libint-2.0.3-stable.tgz 
+    fn: libint-2.3.1.tgz 
+    url: https://github.com/evaleev/libint/releases/download/v2.3.1/libint-2.3.1.tgz
 build:
     number: 1
+    run_exports:
+      - libint
 requirements:
     build:
       - {{ compiler('c') }}
       - {{ compiler('cxx') }}
       - autoconf
       - ccache
+      - libtool
     host:
+      - eigen
       - gmp
       - boost
     run: []
