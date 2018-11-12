@@ -1,0 +1,39 @@
+env:
+  global:
+  - PROJECT_NAME=libint
+  - GITHUB_REPO_NAME=theochem/libint-recipe
+  - CONDA_PKG_NAME_PY=libint
+  - secure: k+krcxO4SiqRL3U0Lau7Kx9+fAGQxX2nTbLOY2C88BHe3BScxerXxj8sUP+ZCMYevj62sd7mAgHoyW4EyGRvShRMUFZvU2eTuTued0yrcK0BV2dPYzXUuV7z2CVfzVN3x3d1bhgWM2Xxognm1GtyD9rdQYHlar0sw+S2nJFCLMaUfy2fH2aygXYGt8ClHugsGAd/1XCLMiD9xunYTWWUO8oRyiTfikZqyR5rUhEOdfckKaGcOhukB5hsXCaWA2kLjQFQYi7STTbRoUKh8r7kQ4r1xVCGvUAyWSlt2q4P/pLEq+G+awkY3+6opKT1wqf8uAkGEcuRgClIEYJ0F6MGZ+qc4BFglDbueMbzJqUsC5riEMn4NTpYpgriyb94XoKdHrg7vK6mJBibip9mKHrE76evglKalhGby23RqhNDPNV1Y8OmEXnHwYxr7KCneVwB0rAev6LU4G5utQ3YLL5mOI8Vgw/J0NcMRjZj0jOm4I9exAL5C6vqpLEvqsF6ROjNzvVc6WfKpItj1oP/tAL1me/DyvBkg553IQLDeUAWruz3RhSy/YeSJ7VxX5SAmh5sZCI9+0kW7cbcIBj1Zz4yK+2KA/hiAbBeCr/Na7rP29NDyAVgDkzcQyBrKx3CjKH1pzeaU0is7zrNu3CKzBergz1PLpyXQnbloDocSdIrZeA=
+language: generic
+os:
+- linux
+- osx
+dist: trusty
+sudo: false
+cache:
+  directories:
+  - $HOME/download
+  - $HOME/miniconda
+before_cache:
+- rm -rf $HOME/miniconda/locks $HOME/miniconda/pkgs $HOME/miniconda/var $HOME/miniconda/conda-meta/history
+before_install:
+- if test -e $HOME/miniconda/bin; then echo "miniconda already installed."; else echo
+  "Installing miniconda."; rm -rf $HOME/miniconda; mkdir -p $HOME/download; if [[
+  -d $HOME/download/miniconda.sh ]]; then rm -rf $HOME/download/miniconda.sh; fi;
+  if [ "${TRAVIS_OS_NAME}" = "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  -O $HOME/download/miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+  -O $HOME/download/miniconda.sh; fi; bash $HOME/download/miniconda.sh -b -p $HOME/miniconda;
+  fi
+install:
+- source $HOME/miniconda/bin/activate
+- hash -r
+- conda config --set always_yes yes
+- conda install -q conda conda-build
+- conda install -q anaconda-client
+- conda info -a
+script:
+- conda build -q tools/conda.recipe
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: anaconda -t $ANACONDA_TOKEN upload --force -l main ${HOME}/miniconda/conda-bld/*/${PROJECT_NAME}-*.tar.bz2
