@@ -32,7 +32,7 @@ install:
 - conda install -q anaconda-client
 - conda info -a
 script:
-- conda build -q tools/conda.recipe
+- conda build -q conda.recipe
 deploy:
 - provider: script
   skip_cleanup: true
